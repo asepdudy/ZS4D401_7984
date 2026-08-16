@@ -1,0 +1,15 @@
+@EndUserText.label: 'Z7984_R_DEPARTMENT'
+@MappingRole: true
+define role Z7984_R_DEPARTMENT {
+    grant
+        select
+            on
+                Z7984_R_DEPARTMENT
+                    where ( Id ) 
+      = aspect pfcg_auth(
+          Z7984DPMNT,
+          Z7984DPMNT,
+          ACTVT = '03'
+         );            
+                        
+}
