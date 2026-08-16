@@ -8,18 +8,19 @@ define view entity Z7984_C_DepartmentQuery
     @EndUserText.label: 'Date of evaluation'
     @Environment.systemField: #SYSTEM_DATE
     p_date        : abap.dats
-  as select from Z7984_C_EmployeeQueryP(
-                      p_target_curr: $parameters.p_target_curr,
-                      p_date: $parameters.p_date )
+  as select from     Z7984_C_EmployeeQueryP(
+                          p_target_curr: $parameters.p_target_curr,
+                          p_date: $parameters.p_date ) as e
+    right outer join Z7984_R_DEPARTMENT                as d on e.DepartmentId = d.Id
 {
-  DepartmentId,
-  DepartmentDescription,
-  avg( CompanyAffiliation as abap.dec(11,1) ) as AverageAffiliation,
+  d.Id,
+  d.Description,
+  avg( e.CompanyAffiliation as abap.dec(11,1) ) as AverageAffiliation,
   @Semantics.amount.currencyCode: 'CurrencyCode'
-  sum( AnnualSalaryConverted )                as TotalSalary,
-  CurrencyCode
+  sum( e.AnnualSalaryConverted )                as TotalSalary,
+  e.CurrencyCode
 }
 group by
-  DepartmentId,
-  DepartmentDescription,
-  CurrencyCode
+  d.Id,
+  d.Description,
+  e.CurrencyCode
